@@ -6,14 +6,6 @@ var atual;			// ponteiro para o nodo que representa o estado atual do jogo
 var pilha = []; // array de ponteiros para nodo - usada para construir a árvore
 var nodos = 0;	// nodos na árvore
 
-/* objeto nodo: 
-
-	{ pai: ponteiro para nodo,
-	  estado: array[3][3] de char,
-	  filhos: array de ponteiros para nodo,
-	  jogador: char,
-	  minimax: int }
-*/
 function escolheComeco(modo){
     // 1 estado inicial vazio 2 estado programado
     if(modo == 2) {
@@ -121,11 +113,13 @@ function ehTerminal(estado,encerra) {	// verifica se estado é terminal, retorna
 	if (utilidade)					// se achou um vencedor
 		if (encerra)
 			if (utilidade > 0){		// utilidade > 0 venceu CPU
-				showMessage("Perdeu Playboy", "Eu ganhei ^^");
+				showMessage("Vitória da CPU!");
+				exibeEstado(estado);
         inicializa();
       }
 			else{
-				showMessage("Comassim???? :'(", "Você ganhou");	// essa mensagem nunca será exibida :)
+				showMessage("Você ganhou!");
+				exibeEstado(estado);
         inicializa();
       }
 		else
@@ -134,7 +128,8 @@ function ehTerminal(estado,encerra) {	// verifica se estado é terminal, retorna
 	else							
 		if (!brancos)				// se não tem mais espaços em branco também é terminal...
 			if (encerra){
-				showMessage("De novo...", "Empatamos .-.");
+				showMessage("Empate!");
+				exibeEstado(estado);
         inicializa();
       }
 			else
@@ -191,10 +186,7 @@ function jogaCPU() {
 
 			opcoes.push(i);	// coloca índice deste filho no array de opções de jogada
         }
-    // opcoes.map(async val => {
-    //     console.log(atual.filhos[val].estado)
 
-    // })
 	// e escolhe aleatoriamente um deles, para dar mais variedade às jogadas
 	r = Math.floor(Math.random()*opcoes.length);
 	atual = atual.filhos[opcoes[r]];
