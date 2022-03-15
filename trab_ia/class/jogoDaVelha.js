@@ -20,6 +20,9 @@ window.onload = function() {
 };
 
 function inicializa() {
+    document.getElementById(`vitoria`).style.display = "none";
+    document.getElementById(`derrota`).style.display = "none";
+    document.getElementById(`empate`).style.display = "none";
 	estado = [ [],[],[] ];
 	raiz = null;
 	atual = null;
@@ -113,14 +116,12 @@ function ehTerminal(estado,encerra) {	// verifica se estado é terminal, retorna
 	if (utilidade)					// se achou um vencedor
 		if (encerra)
 			if (utilidade > 0){		// utilidade > 0 venceu CPU
-				showMessage("Vitória da CPU!");
 				exibeEstado(estado);
-        inicializa();
+				showMessage("derrota");
       }
 			else{
-				showMessage("Você ganhou!");
 				exibeEstado(estado);
-        inicializa();
+                showMessage("vitoria");
       }
 		else
 			return utilidade*(brancos+1); 	// retorna valor de utilidade - número de casas vagas dá um peso maior,
@@ -128,9 +129,8 @@ function ehTerminal(estado,encerra) {	// verifica se estado é terminal, retorna
 	else							
 		if (!brancos)				// se não tem mais espaços em branco também é terminal...
 			if (encerra){
-				showMessage("Empate!");
+				showMessage("empate");
 				exibeEstado(estado);
-        inicializa();
       }
 			else
 				return 0;			// ...com utilidade 0 (empate)
@@ -143,8 +143,7 @@ function jogaHumano(elemento) {
 	var i = Number(elemento[0]); // pega linha a partir da id do elemento (ex. "p02")
 	var j = Number(elemento[1]); // pega coluna a partir da id do elemento
   
-	if (estado[i][j]) {
-		showMessage("Posição inválida", i.toString() + j.toString());
+	if (estado[i][j]) { // ja foi ocupado
 		return;
 	}
 	else {
@@ -156,6 +155,8 @@ function jogaHumano(elemento) {
 		if (!raiz)			// se raiz é null, árvore ainda não foi gerada (humano começa o jogo)
 			geraArvore();	// a raiz será o estado atual, já com a jogada do humano
 		else
+            exibeEstado(estado);
+
 			for (i=0;i < atual.filhos.length; i++)	// procura nos filhos do estado atual, qual representa a situação após a jogada do humano
 				if (comparaEstados(estado,atual.filhos[i].estado)) {
 					atual = atual.filhos[i];
@@ -182,8 +183,6 @@ function jogaCPU() {
 	// percorre novamente os filhos, checando todos que tenham o mesmo valor minimax otimizado
 	for (i=0;i < atual.filhos.length; i++)
 		if (atual.filhos[i].minimax == max){
-            setTimeout(() => exibeEstadoTemporario(atual.filhos[i]), 1000);
-
 			opcoes.push(i);	// coloca índice deste filho no array de opções de jogada
         }
 
@@ -193,7 +192,7 @@ function jogaCPU() {
 	estado = atual.estado;
     console.log(r)
 	exibeEstado(estado);
-	
+	console.log(estado)
 	ehTerminal(estado,1);	// Verifica se atingiu estado terminal, encerrando o jogo 
 }
 
@@ -229,9 +228,14 @@ function exibeEstadoTemporario(newEstado) {	// atualiza tabuleiro na tela
 
 
 function showMessage(msg, winner="") {
-  document.getElementById("winner").innerText = winner;
-  document.getElementById("text").innerText = msg;
-  document.getElementById("open").click();
+        document.getElementById(`${msg}`).style.display = "block";
+        document.getElementById(`${msg}`).display = msg;
+        document.getElementById(`${msg}`).click();
+    setTimeout(() => {
+        inicializa()
+    }, 3500);
+
+  
 }
 
 /* funções auxiliares */

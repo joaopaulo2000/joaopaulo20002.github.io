@@ -44,7 +44,7 @@
 
 .modal {
   position: fixed;
-  background-color: grey;
+  /* background-color: grey; */
   top: 0;
   right: 0;
   bottom: 0;
@@ -105,6 +105,12 @@
 <div>
     <button onclick="escolheComeco(1)">MODO ESTADO ZERADO</button>
     <button onclick="escolheComeco(2)">MODO ESTADO QUESTAO</button>
+    <br>
+    <h2 id='vitoria' style="color: green; display: none">PARABÉNS VOCÉ GANHOU!!!!</h2>
+    <br>
+    <h2 id='derrota' style="color: red; display: none">QUE PENA, VOCÉ PERDEU!!!</h2>
+    <br>
+    <h2 id='empate' style="color: gray; display: none">EMPATE!!!</h2>
     </div>
 
    <div class="row" style="border-top-color: #fff">
